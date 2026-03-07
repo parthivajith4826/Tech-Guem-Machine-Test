@@ -1,0 +1,17 @@
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Courses</title>
+</head>
+<body>
+    {% for course in courses %}
+    <h3>Course Name = {{ course.name }}</h3>
+    <h3>Course Duration = {{ course.duration }}</h3>
+    <a href="{% url 'students:register_course' course.id %}" class=""><h6>Register</h6></a>
+    <br><br>
+    {% endfor %}
+
+    <a href="{% url 'students:home' %}" class=""><p>< -- back</p></a>
+</body>
+</html>

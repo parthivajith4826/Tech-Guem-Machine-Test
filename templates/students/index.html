@@ -1,0 +1,18 @@
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Home</title>
+</head>
+<body>
+    {% if user %}
+    <a href="{% url 'students:courses' %}" class=""><h1>All Courses</h1></a>
+    <h1>Registerd Courses - {{ count }}</h1>
+    <a href="{% url 'students:logout' %}" class=""><h1>Logout</h1></a>
+    {% else %}
+    <a href="{% url 'students:home' %}" class=""><h1>Home</h1></a>
+    <a href="{% url 'students:register' %}" class=""><h1>Register</h1></a>
+    <a href="{% url 'students:login' %}" class=""><h1>Login</h1></a>
+    {% endif %}
+</body>
+</html>

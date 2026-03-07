@@ -1,0 +1,25 @@
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Register</title>
+</head>
+<body>
+    <h1>Register</h1>
+
+    <form action="" method="post">
+        {% comment %} {{ form.errors }} {% endcomment %}
+        {% csrf_token %}
+        <label for="">Name</label>
+        <input type="text" name="name">
+        {{ form.name.errors }}
+        <label for="">Email</label>
+        <input type="Email" name="email">
+        {{ form.email.errors }}
+        <label for="">Age</label>
+        <input type="number" name="age">
+        {{ form.age.errors }}
+        <button>Register</button>
+    </form>
+    <a href="{% url 'students:home' %}" class=""><p>< -- back</p></a>
+</html>
