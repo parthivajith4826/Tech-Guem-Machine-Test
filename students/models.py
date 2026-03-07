@@ -11,7 +11,7 @@ class Course(models.Model):
         return self.name
     
 class Students(models.Model):
-    name = models.CharField(max_length=100)
+    name = models.CharField(max_length=500)
     email=models.EmailField(unique=True,null=False,blank=False)
     age=models.IntegerField()
     course = models.ManyToManyField(Course,null=True)
