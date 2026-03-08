@@ -1,10 +1,10 @@
-from django.urls import path,include
+from django.urls import path
 from . import views
 
 
 urlpatterns = [
-    path('students/',views.Students.as_view()),
-    # path('students/<int:pk>/',views.StudentDetail.as_view()),
-    path('courses/',views.Courses.as_view()),
-    path('course/<int:pk>/',views.CourseDetail.as_view()),
+    path('students/', views.StudentListCreateView.as_view()),
+    path('students/<int:pk>/', views.StudentDetailView.as_view()),
+    path('courses/', views.CourseListCreateView.as_view()),
+    path('course/<int:pk>/', views.CourseDetailView.as_view()),
 ]
