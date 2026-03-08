@@ -1,26 +1,60 @@
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Login</title>
-</head>
-<body>
+{% extends "students/base.html" %}
+
+{% block title %}Login | Student Portal{% endblock %}
+
+{% block extra_css %}
+<style>
+    .auth-wrap {
+        max-width: 500px;
+        margin: 28px auto;
+        padding: 24px;
+    }
+
+    .auth-wrap h1 {
+        margin: 0 0 6px;
+    }
+
+    .auth-wrap p {
+        margin: 0 0 18px;
+        color: var(--muted);
+    }
+
+    .auth-footer {
+        margin-top: 12px;
+        font-size: 0.94rem;
+        color: var(--muted);
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<section class="panel auth-wrap reveal">
     <h1>Login</h1>
+    <p>Access your student dashboard using your name and email.</p>
 
     <form action="" method="post">
-        
         {% csrf_token %}
-        <label for="">Name</label>
-        <input type="text" name="name">
-        {{ form.name.errors }}
-        <label for="">Email</label>
-        <input type="Email" name="email">
-        {{ form.email.errors }}
-        {% if error%}
-        {{ error }}
+        <div class="field">
+            <label for="name">Name</label>
+            <input id="name" type="text" name="name" value="{{ request.POST.name|default:'' }}" required>
+            {{ form.name.errors }}
+        </div>
+
+        <div class="field">
+            <label for="email">Email</label>
+            <input id="email" type="email" name="email" value="{{ request.POST.email|default:'' }}" required>
+            {{ form.email.errors }}
+        </div>
+
+        {% if error %}
+        <div class="alert alert-danger">{{ error }}</div>
         {% endif %}
-        <button>Login</button>
+
+        <button class="btn btn-primary" type="submit">Login</button>
     </form>
-    <a href="{% url 'students:home' %}" class=""><p>< -- back</p></a>
-</body>
-</html>
+
+    <div class="auth-footer">
+        New here? <a href="{% url 'students:register' %}" style="color: var(--primary); font-weight: 600;">Register</a>
+    </div>
+</section>
+{% endblock %}

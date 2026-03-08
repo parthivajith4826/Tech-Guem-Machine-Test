@@ -1,17 +1,135 @@
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Courses</title>
-</head>
-<body>
-    {% for course in courses %}
-    <h3>Course Name = {{ course.name }}</h3>
-    <h3>Course Duration = {{ course.duration }}</h3>
-    <a href="{% url 'students:register_course' course.id %}" class=""><h6>Register</h6></a>
-    <br><br>
-    {% endfor %}
+{% extends "students/base.html" %}
 
-    <a href="{% url 'students:home' %}" class=""><p>< -- back</p></a>
-</body>
-</html>
+{% block title %}Courses | Student Portal{% endblock %}
+
+{% block extra_css %}
+<style>
+    .head {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: space-between;
+        align-items: end;
+        gap: 14px;
+        margin-bottom: 18px;
+    }
+
+    .head h1 {
+        margin: 0;
+    }
+
+    .head p {
+        margin: 6px 0 0;
+        color: var(--muted);
+    }
+
+    .search {
+        width: min(300px, 100%);
+    }
+
+    .search input {
+        width: 100%;
+        border: 1px solid var(--line);
+        border-radius: 12px;
+        padding: 11px 12px;
+        font: inherit;
+        background: #fff;
+    }
+
+    .search input:focus {
+        outline: none;
+        border-color: var(--primary);
+        box-shadow: 0 0 0 4px rgba(15, 118, 110, 0.12);
+    }
+
+    .course-grid {
+        display: grid;
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        gap: 14px;
+    }
+
+    .course-card {
+        padding: 18px;
+    }
+
+    .course-card h3 {
+        margin: 0 0 8px;
+        font-size: 1.15rem;
+    }
+
+    .course-card p {
+        margin: 0 0 16px;
+        color: var(--muted);
+    }
+
+    .empty {
+        margin-top: 12px;
+        color: var(--muted);
+        display: none;
+    }
+
+    @media (max-width: 940px) {
+        .course-grid {
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+        }
+    }
+
+    @media (max-width: 620px) {
+        .course-grid {
+            grid-template-columns: 1fr;
+        }
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<section class="reveal">
+    <div class="head">
+        <div>
+            <h1>Available Courses</h1>
+            <p>Browse and register from the current catalog.</p>
+        </div>
+        <div class="search">
+            <input id="courseSearch" type="text" placeholder="Search by course name">
+        </div>
+    </div>
+
+    <div class="course-grid" id="courseGrid">
+        {% for course in courses %}
+        <article class="panel course-card" data-name="{{ course.name|lower }}">
+            <h3>{{ course.name }}</h3>
+            <p>Duration: {{ course.duration }}</p>
+            <a href="{% url 'students:register_course' course.id %}" class="btn btn-primary">Register</a>
+        </article>
+        {% endfor %}
+    </div>
+
+    <p id="emptySearch" class="empty">No matching course found.</p>
+</section>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    (function () {
+        var input = document.getElementById("courseSearch");
+        var grid = document.getElementById("courseGrid");
+        var empty = document.getElementById("emptySearch");
+        if (!input || !grid || !empty) return;
+
+        var cards = Array.prototype.slice.call(grid.querySelectorAll(".course-card"));
+
+        input.addEventListener("input", function () {
+            var value = input.value.trim().toLowerCase();
+            var visible = 0;
+
+            cards.forEach(function (card) {
+                var name = card.getAttribute("data-name") || "";
+                var show = !value || name.indexOf(value) !== -1;
+                card.style.display = show ? "" : "none";
+                if (show) visible += 1;
+            });
+
+            empty.style.display = visible ? "none" : "block";
+        });
+    })();
+</script>
+{% endblock %}

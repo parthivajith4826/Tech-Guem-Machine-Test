@@ -1,18 +1,129 @@
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Home</title>
-</head>
-<body>
+{% extends "students/base.html" %}
+
+{% block title %}Home | Student Portal{% endblock %}
+
+{% block extra_css %}
+<style>
+    .hero {
+        display: grid;
+        grid-template-columns: 1.3fr 1fr;
+        gap: 20px;
+        padding: 28px;
+    }
+
+    .hero h1 {
+        margin: 0 0 10px;
+        line-height: 1.15;
+        font-size: clamp(1.8rem, 2.8vw, 2.6rem);
+    }
+
+    .hero p {
+        margin: 0 0 24px;
+        color: var(--muted);
+        max-width: 54ch;
+    }
+
+    .hero-actions {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 10px;
+    }
+
+    .stats {
+        display: grid;
+        gap: 12px;
+    }
+
+    .stat-card {
+        padding: 18px;
+        border-radius: 14px;
+        background: var(--surface-alt);
+        border: 1px solid var(--line);
+    }
+
+    .stat-label {
+        margin: 0 0 6px;
+        color: var(--muted);
+        font-size: 0.92rem;
+    }
+
+    .stat-value {
+        margin: 0;
+        font-size: 1.9rem;
+        font-weight: 700;
+    }
+
+    @media (max-width: 850px) {
+        .hero {
+            grid-template-columns: 1fr;
+            padding: 20px;
+        }
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<section class="panel hero reveal">
     {% if user %}
-    <a href="{% url 'students:courses' %}" class=""><h1>All Courses</h1></a>
-    <h1>Registerd Courses - {{ count }}</h1>
-    <a href="{% url 'students:logout' %}" class=""><h1>Logout</h1></a>
+    <div>
+        <h1>Welcome back, {{ user.name }}</h1>
+        <p>Your profile is active. You can browse all available courses and register quickly from the course dashboard.</p>
+        <div class="hero-actions">
+            <a href="{% url 'students:courses' %}" class="btn btn-primary">View Courses</a>
+            <a href="{% url 'students:logout' %}" class="btn btn-ghost">Logout</a>
+        </div>
+    </div>
+    <div class="stats">
+        <article class="stat-card">
+            <p class="stat-label">Registered Courses</p>
+            <p class="stat-value" id="courseCount">{{ count|default:0 }}</p>
+        </article>
+        <article class="stat-card">
+            <p class="stat-label">Account Email</p>
+            <p class="stat-value" style="font-size:1.1rem; word-break: break-word;">{{ user.email }}</p>
+        </article>
+    </div>
     {% else %}
-    <a href="{% url 'students:home' %}" class=""><h1>Home</h1></a>
-    <a href="{% url 'students:register' %}" class=""><h1>Register</h1></a>
-    <a href="{% url 'students:login' %}" class=""><h1>Login</h1></a>
+    <div>
+        <h1>Learn Faster With Structured Course Registration</h1>
+        <p>Register your profile, sign in, and start enrolling in available courses from one streamlined portal.</p>
+        <div class="hero-actions">
+            <a href="{% url 'students:register' %}" class="btn btn-primary">Create Account</a>
+            <a href="{% url 'students:login' %}" class="btn btn-ghost">Login</a>
+        </div>
+    </div>
+    <div class="stats">
+        <article class="stat-card">
+            <p class="stat-label">Simple Flow</p>
+            <p class="stat-value" style="font-size:1.2rem;">Register, Login, Enroll</p>
+        </article>
+        <article class="stat-card">
+            <p class="stat-label">Dashboard Access</p>
+            <p class="stat-value" style="font-size:1.2rem;">Instant Course List</p>
+        </article>
+    </div>
     {% endif %}
-</body>
-</html>
+</section>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    (function () {
+        var el = document.getElementById("courseCount");
+        if (!el) return;
+        var target = parseInt(el.textContent, 10);
+        if (Number.isNaN(target) || target < 0) return;
+        var current = 0;
+        var step = Math.max(1, Math.ceil(target / 18));
+        var timer = setInterval(function () {
+            current += step;
+            if (current >= target) {
+                el.textContent = target;
+                clearInterval(timer);
+                return;
+            }
+            el.textContent = current;
+        }, 24);
+    })();
+</script>
+{% endblock %}

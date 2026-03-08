@@ -1,25 +1,63 @@
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Register</title>
-</head>
-<body>
-    <h1>Register</h1>
+{% extends "students/base.html" %}
+
+{% block title %}Register | Student Portal{% endblock %}
+
+{% block extra_css %}
+<style>
+    .auth-wrap {
+        max-width: 520px;
+        margin: 28px auto;
+        padding: 24px;
+    }
+
+    .auth-wrap h1 {
+        margin: 0 0 6px;
+    }
+
+    .auth-wrap p {
+        margin: 0 0 18px;
+        color: var(--muted);
+    }
+
+    .auth-footer {
+        margin-top: 12px;
+        font-size: 0.94rem;
+        color: var(--muted);
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<section class="panel auth-wrap reveal">
+    <h1>Create Account</h1>
+    <p>Set up your profile to start registering for courses.</p>
 
     <form action="" method="post">
-        {% comment %} {{ form.errors }} {% endcomment %}
         {% csrf_token %}
-        <label for="">Name</label>
-        <input type="text" name="name">
-        {{ form.name.errors }}
-        <label for="">Email</label>
-        <input type="Email" name="email">
-        {{ form.email.errors }}
-        <label for="">Age</label>
-        <input type="number" name="age">
-        {{ form.age.errors }}
-        <button>Register</button>
+
+        <div class="field">
+            <label for="name">Name</label>
+            <input id="name" type="text" name="name" value="{{ request.POST.name|default:'' }}" required>
+            {{ form.name.errors }}
+        </div>
+
+        <div class="field">
+            <label for="email">Email</label>
+            <input id="email" type="email" name="email" value="{{ request.POST.email|default:'' }}" required>
+            {{ form.email.errors }}
+        </div>
+
+        <div class="field">
+            <label for="age">Age</label>
+            <input id="age" type="number" name="age" value="{{ request.POST.age|default:'' }}" required>
+            {{ form.age.errors }}
+        </div>
+
+        <button class="btn btn-primary" type="submit">Register</button>
     </form>
-    <a href="{% url 'students:home' %}" class=""><p>< -- back</p></a>
-</html>
+
+    <div class="auth-footer">
+        Already registered? <a href="{% url 'students:login' %}" style="color: var(--primary); font-weight: 600;">Login</a>
+    </div>
+</section>
+{% endblock %}
